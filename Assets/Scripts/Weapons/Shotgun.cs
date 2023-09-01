@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,13 +10,11 @@ public class ShotgunArgs
     public int bulletCountModifier = 1;
 }
 
-[CreateAssetMenu(fileName = "Shotgun", menuName = "Weapon/Shotgun")]
-public class Shotgun : WeaponBase
+public class Shotgun : AWeaponBase
 {
     [SerializeField] private int bulletCountBase = 5;
     [SerializeField] private float scatterBase = 10;
 
-    private Player player;
     private float nextShootTime = 0;
     private float scatter;
     private int bulletCount;
@@ -23,21 +22,23 @@ public class Shotgun : WeaponBase
     public override void Init(BulletController bulletController)
     {
         base.Init(bulletController);
-        Controllers.GetController(EControllerType.Player, out player);
         nextShootTime = 0;
         scatter = scatterBase;
         bulletCount = bulletCountBase;
     }
 
-    public override void Shoot(bool isDown = true)
+    private void Update()
+    {
+        FollowMouse();
+    }
+
+    public override void Shoot(bool isDown = false)
     {
         if (isDown && Time.time > nextShootTime)
         {
             nextShootTime = Time.time + reloadTime;
 
-            var mainDirection =
-                ((Vector2)(bulletController.Camera.ScreenToWorldPoint(Mouse.current.position.ReadValue()) -
-                           player.BulletSpawnTransform.position)).normalized;
+            var mainDirection = GetDirection();
             
             int startCount = - (bulletCount / 2);
             int endCount = 0;
@@ -54,10 +55,7 @@ public class Shotgun : WeaponBase
             for (int i = startCount; i < endCount; i++)
             {
                 var direction = (Vector2)(Quaternion.AngleAxis( scatter * i, Vector3.forward) * mainDirection);
-                var bullet = bulletController.GetBullet(_type);
-                bullet.transform.position = player.BulletSpawnTransform.position;
-                bullet.transform.right = direction;
-                bullet.Fire(direction);
+                BaseShoot(direction);
             }
         }
     }

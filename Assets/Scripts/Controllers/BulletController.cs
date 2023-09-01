@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BulletController : AController
@@ -9,10 +10,9 @@ public class BulletController : AController
     
     private Action<bool> shoot = b => {};
     public Camera Camera => _camera;
-    
-    private Dictionary<EWeaponType, LinkedList<Bullet>> freeBulletsPool =
-        new Dictionary<EWeaponType, LinkedList<Bullet>>();
-    private WeaponBase weapon;
+
+    private Pool<Bullet> bulletsPool;
+    private AWeaponBase weapon;
     private bool _isDown = false;
     private Camera _camera;
     
@@ -20,23 +20,23 @@ public class BulletController : AController
 
     private void Start()
     {
-        Controllers.GetController(EControllerType.Player, out player);
+        Controllers.Instance.GetController(EControllerType.Player, out player);
         _camera = Camera.main;
-        var weaponNames = (EWeaponType[])Enum.GetValues(typeof(EWeaponType));
-        for (int i = 0; i < weaponNames.Length; i++)
+        bulletsPool = new Pool<Bullet>(() =>
         {
-            freeBulletsPool.Add(weaponNames[i], new LinkedList<Bullet>());
-        }
+            var bullet = Instantiate(weapon.Bullet, bulletsPoolTransform);
+            return bullet;
+        }, Enum.GetValues(typeof(EWeaponType)).Cast<Enum>().ToList(), BulletInit);
     }
 
     private void Update()
     { 
         shoot.Invoke(_isDown);
     }
-    
+
     public void SetIsDown(bool value) => _isDown = value;
 
-    public void SetWeapon(WeaponBase weapon)
+    public void SetWeapon(AWeaponBase weapon)
     {
         if (this.weapon != null) 
             shoot -= this.weapon.Shoot;
@@ -44,24 +44,15 @@ public class BulletController : AController
         this.weapon = weapon;
     }
 
-    public Bullet GetBullet(EWeaponType weaponType)
-    {
-        if (freeBulletsPool[weaponType].Count < 1)
-        {
-            var bullet = Instantiate(weapon.Bullet, bulletsPoolTransform);
-            bullet.Init(weaponType, OnBulletHide);
-            return bullet;
-        }
-        else
-        {
-            var bullet = freeBulletsPool[weaponType].First.Value;
-            freeBulletsPool[weaponType].RemoveFirst();
-            return bullet;
-        }
-    }
-    
+    public Bullet GetBullet(EWeaponType type) => bulletsPool.GetFreeObject(type);
+
     private void OnBulletHide(Bullet bullet)
     {
-        freeBulletsPool[bullet.WeaponType].AddLast(bullet);
+        bulletsPool.AddFreeObject(bullet.WeaponType, bullet);
+    }
+    
+    private void BulletInit(Bullet bullet)
+    {
+        bullet.Init(weapon.Type, OnBulletHide);
     }
 }

@@ -17,7 +17,7 @@ public class GroundController : AController
 
     private void Start()
     {
-        Controllers.GetController(EControllerType.Player, out player);
+        Controllers.Instance.GetController(EControllerType.Player, out player);
     }
 
     public void OnTileExit(Collider2D collider)

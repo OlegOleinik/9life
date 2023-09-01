@@ -1,34 +1,40 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class EnemiesController : AController
 {
     [SerializeField] private float spawnDelay = 0.1f;
     [SerializeField] private int maxEnemiesCount = 10;
-    [SerializeField] private List<EEnemyType> enemies;
     [SerializeField] private List<SpawnArea> spawnAreas;
     [SerializeField] private Transform enemiesPoolTransform;
     [SerializeField] private List<AEnemy> enemiesPrefabs;
     public Vector2 TargetPoint => player.transform.position;
 
+    private List<EEnemyType> enemies = new List<EEnemyType>();
+    private Pool<AEnemy> enemiesPool;
     private int enemiesCount = 0;
     private float nextEnemySpawn = 0;
-    
-    private Dictionary<EEnemyType, LinkedList<AEnemy>> freeEnemiesPool =
-        new Dictionary<EEnemyType, LinkedList<AEnemy>>();
+    private EEnemyType NextEnemyType {get; set; }
     
     private Player player;
 
     private void Start()
     {
-        Controllers.GetController(EControllerType.Player, out player);
-        var enemiesNames = (EEnemyType[])Enum.GetValues(typeof(EEnemyType));
-        for (int i = 0; i < enemiesNames.Length; i++)
+        Controllers.Instance.GetController(EControllerType.Player, out player);
+
+        foreach (var enemy in enemiesPrefabs)
         {
-            freeEnemiesPool.Add(enemiesNames[i], new LinkedList<AEnemy>());
+            enemies.Add(enemy.Type);
         }
+
+        enemiesPool = new Pool<AEnemy>(() =>
+        {
+            var enemy = Instantiate(enemiesPrefabs.Find(e => e.Type == NextEnemyType), enemiesPoolTransform);
+            return enemy;
+        }, Enum.GetValues(typeof(EEnemyType)).Cast<Enum>().ToList(), EnemyInit);
     }
 
     private void Update()
@@ -39,36 +45,25 @@ public class EnemiesController : AController
         }
     }
 
+    private void EnemyInit(AEnemy enemy)
+    {
+        enemy.Init(OnEnemyDie);
+    }
+
     public void OnEnemyDie(AEnemy enemy)
     {
-        freeEnemiesPool[enemy.Type].AddLast(enemy);
+        enemiesPool.AddFreeObject(enemy.Type, enemy);
         enemiesCount--;
     }
 
     private void SpawnEnemy()
     {
         nextEnemySpawn = Time.time + spawnDelay;
-        var enemyType = enemies[UnityEngine.Random.Range(0, enemies.Count)];
-        var enemy = GetFreeEnemy(enemyType);
+        NextEnemyType = enemies[UnityEngine.Random.Range(0, enemies.Count)];
+        var enemy = enemiesPool.GetFreeObject(NextEnemyType);
         enemy.OnSpawnEnemy();
         var spawnArea = spawnAreas[UnityEngine.Random.Range(0, spawnAreas.Count)];
         enemy.transform.position = spawnArea.GetSpawnPoint();
         enemiesCount++;
-    }
-
-    private AEnemy GetFreeEnemy(EEnemyType type)
-    {
-        if (freeEnemiesPool[type].Count < 1)
-        {
-            var enemy = Instantiate(enemiesPrefabs.Find(e => e.Type == type), enemiesPoolTransform);
-            enemy.Init(OnEnemyDie);
-            return enemy;
-        }
-        else
-        {
-            var enemy = freeEnemiesPool[type].First.Value;
-            freeEnemiesPool[type].RemoveFirst();
-            return enemy;
-        }
     }
 }

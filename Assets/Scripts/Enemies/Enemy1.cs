@@ -5,14 +5,38 @@ using UnityEngine;
 
 public class Enemy1 : AEnemy
 {
+    [SerializeField] private float damageScale = 1;
+
+    private float speedModifier = 1;
+    private Vector3 baseScale;
+
+    protected override void Start()
+    {
+        base.Start();
+        baseScale = transform.localScale;
+    }
+
     private void FixedUpdate()
     {
         Move();
     }
+    
+    protected override void ResetEnemy()
+    {
+        base.ResetEnemy();
+        transform.localScale = baseScale;
+        speedModifier = 1;
+    }
+
+    public override void GetDamage(int damage)
+    {
+        transform.localScale *= damageScale;
+        speedModifier *= 1 / damageScale;
+        base.GetDamage(damage);
+    }
 
     public override void Move()
     {
-        var dir = (enemiesController.TargetPoint - (Vector2)transform.position).normalized;
-        rigidbody2D.position += dir * speed;
+        rigidbody2D.position += GetDirection() * speed * speedModifier;
     }
 }

@@ -55,7 +55,7 @@ public class Bullet : MonoBehaviour
     {
         this.WeaponType = weaponType;
         this.OnHide += OnHide;
-        Controllers.GetController(EControllerType.Player, out player);
+        Controllers.Instance.GetController(EControllerType.Player, out player);
     }
 
     public void Fire(Vector2 direction, BulletModifier modifier = null)

@@ -16,7 +16,7 @@ public class GroundGrid : MonoBehaviour
 
     private void Start()
     {
-        Controllers.GetController(EControllerType.Ground, out groundController);
+        Controllers.Instance.GetController(EControllerType.Ground, out groundController);
         OnTileExit += groundController.OnTileExit;
         groundController.SetGrid(gameObject);
 

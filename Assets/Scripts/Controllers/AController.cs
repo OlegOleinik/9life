@@ -8,6 +8,8 @@ public enum EControllerType
     Player = 1,
     Enemies = 2,
     Bullet = 3,
+    Windows = 4,
+    Pause = 5,
 }
 
 public abstract class AController : MonoBehaviour

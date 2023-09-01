@@ -26,10 +26,11 @@ public abstract class AEnemy : MonoBehaviour, IMoveable, IDamagable
     protected int health;
     protected float nextDamage = 0;
 
-    private void Start()
+    protected virtual void Start()
     {
-        Controllers.GetController(EControllerType.Enemies, out enemiesController);
-        Controllers.GetController(EControllerType.Player, out player);
+        Controllers.Instance.GetController(EControllerType.Enemies, out enemiesController);
+        Controllers.Instance.GetController(EControllerType.Player, out player);
+        health = baseHealth;
     }
     
     protected virtual void OnCollisionStay2D(Collision2D collision)
@@ -40,7 +41,15 @@ public abstract class AEnemy : MonoBehaviour, IMoveable, IDamagable
             player.GetDamage(damage);
         }
     }
-    
+
+    protected void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.CompareTag("EnemiesDespawnArea"))
+        {
+            Die();
+        }
+    }
+
     public void Init(Action<AEnemy> OnDie)
     {
         this.OnDie += OnDie;
@@ -56,6 +65,11 @@ public abstract class AEnemy : MonoBehaviour, IMoveable, IDamagable
         health = baseHealth;
     }
 
+    protected virtual Vector2 GetDirection()
+    {
+        return (enemiesController.TargetPoint - (Vector2)transform.position).normalized;
+    }
+
     public virtual void GetDamage(int damage)
     {
         health -= damage;
@@ -68,6 +82,9 @@ public abstract class AEnemy : MonoBehaviour, IMoveable, IDamagable
         ResetEnemy();
         OnDie.Invoke(this);
     }
-    
-    public abstract void Move();
+
+    public virtual void Move()
+    {
+        rigidbody2D.position += GetDirection() * speed;
+    }
 }
