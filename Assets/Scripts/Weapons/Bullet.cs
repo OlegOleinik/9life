@@ -16,14 +16,15 @@ public class Bullet : MonoBehaviour
     [SerializeField] private float baseHideDelay = 3;
     [SerializeField] private Rigidbody2D rigidbody2D;
 
-    private Action<Bullet> OnHide = bullet => { };
     public EWeaponType WeaponType {get; private set;}
 
+    protected Player player;
+
+    private Action<Bullet> OnHide = bullet => { };
     private float hideTime;
     private float speed;
     private bool isActive = false;
     private Vector2 direction;
-    protected Player player;
 
     private void FixedUpdate()
     {

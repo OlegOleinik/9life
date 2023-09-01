@@ -11,6 +11,7 @@ public class EnemiesController : AController
     [SerializeField] private List<SpawnArea> spawnAreas;
     [SerializeField] private Transform enemiesPoolTransform;
     [SerializeField] private List<AEnemy> enemiesPrefabs;
+    
     public Vector2 TargetPoint => player.transform.position;
 
     private List<EEnemyType> enemies = new List<EEnemyType>();
@@ -44,18 +45,18 @@ public class EnemiesController : AController
             SpawnEnemy();
         }
     }
-
+    
+    public void OnEnemyDie(AEnemy enemy)
+    {
+        enemiesPool.TryAddFreeObject(enemy.Type, enemy);
+        enemiesCount--;
+    }
+    
     private void EnemyInit(AEnemy enemy)
     {
         enemy.Init(OnEnemyDie);
     }
-
-    public void OnEnemyDie(AEnemy enemy)
-    {
-        enemiesPool.AddFreeObject(enemy.Type, enemy);
-        enemiesCount--;
-    }
-
+    
     private void SpawnEnemy()
     {
         nextEnemySpawn = Time.time + spawnDelay;

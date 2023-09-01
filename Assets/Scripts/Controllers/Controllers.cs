@@ -8,8 +8,11 @@ using UnityEngine;
 
 public sealed class Controllers : MonoBehaviour
 {
-    private static Controllers _instance = null;
+    [SerializeField] private List<AController> controllersList;
     
+    private static Controllers _instance = null;
+    private Dictionary<EControllerType, AController> controllersDictonary = new Dictionary<EControllerType, AController>();
+
     public static Controllers Instance
     {
         get
@@ -17,15 +20,25 @@ public sealed class Controllers : MonoBehaviour
             if (_instance == null)
             {
                 _instance = new Controllers();
+                _instance.Init();
             }
             return _instance;
         }
     }
 
-    [SerializeField] private List<AController> controllersList;
-    private Dictionary<EControllerType, AController> controllersDictonary = new Dictionary<EControllerType, AController>();
+    private void Awake()
+    {
+        Init();
+    }
 
-    void Awake()
+    public bool GetController<T>(EControllerType type, out T controllerOut) where T : MonoBehaviour
+    {
+        var controller = _instance.controllersDictonary[type];
+        controllerOut = controller.GetComponent<T>();
+        return controllerOut != null;
+    }
+
+    private void Init()
     {
         foreach (var controller in controllersList)
         {
@@ -35,12 +48,5 @@ public sealed class Controllers : MonoBehaviour
                 controllersDictonary.Add(controller.ControllerType, controller);
         }
         _instance = this;
-    }
-
-    public bool GetController<T>(EControllerType type, out T controllerOut) where T : MonoBehaviour
-    {
-        var controller = _instance.controllersDictonary[type];
-        controllerOut = controller.GetComponent<T>();
-        return controllerOut != null;
     }
 }

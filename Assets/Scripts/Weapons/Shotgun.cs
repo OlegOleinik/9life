@@ -18,7 +18,12 @@ public class Shotgun : AWeaponBase
     private float nextShootTime = 0;
     private float scatter;
     private int bulletCount;
-
+    
+    private void Update()
+    {
+        FollowMouse();
+    }
+    
     public override void Init(BulletController bulletController)
     {
         base.Init(bulletController);
@@ -26,12 +31,7 @@ public class Shotgun : AWeaponBase
         scatter = scatterBase;
         bulletCount = bulletCountBase;
     }
-
-    private void Update()
-    {
-        FollowMouse();
-    }
-
+    
     public override void Shoot(bool isDown = false)
     {
         if (isDown && Time.time > nextShootTime)

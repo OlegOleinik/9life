@@ -9,10 +9,7 @@ public class GroundGrid : MonoBehaviour
     [SerializeField] private BoxCollider2D boxCollider2D;
     
     private Action<Collider2D> OnTileExit = (Collider2D collider) => { };
-
     private GroundController groundController;
-    
-    void OnTriggerExit2D(Collider2D collider) => OnTileExit.Invoke(collider);
 
     private void Start()
     {
@@ -29,5 +26,7 @@ public class GroundGrid : MonoBehaviour
                 if (i == 0 && j == 0) boxCollider2D.size = (Vector2Int)newTile.Tilemap.size * 2;
             }
         }
-    }
+    }    
+    
+    private void OnTriggerExit2D(Collider2D collider) => OnTileExit.Invoke(collider);
 }

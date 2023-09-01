@@ -8,14 +8,13 @@ public class BulletController : AController
 {
     [SerializeField] private Transform bulletsPoolTransform;
     
-    private Action<bool> shoot = b => {};
     public Camera Camera => _camera;
 
+    private Action<bool> shoot = b => {};
     private Pool<Bullet> bulletsPool;
     private AWeaponBase weapon;
     private bool _isDown = false;
     private Camera _camera;
-    
     private Player player;
 
     private void Start()
@@ -48,7 +47,7 @@ public class BulletController : AController
 
     private void OnBulletHide(Bullet bullet)
     {
-        bulletsPool.AddFreeObject(bullet.WeaponType, bullet);
+        bulletsPool.TryAddFreeObject(bullet.WeaponType, bullet);
     }
     
     private void BulletInit(Bullet bullet)

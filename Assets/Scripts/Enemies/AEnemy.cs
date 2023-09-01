@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Interfaces;
 using UnityEngine;
 
 public enum EEnemyType
@@ -17,14 +18,15 @@ public abstract class AEnemy : MonoBehaviour, IMoveable, IDamagable
     [SerializeField] protected int damage = 1;
     [SerializeField] protected float speed = 1;
     [SerializeField] protected float damageDelay = 1;
-
-    private Action<AEnemy> OnDie = enemy => { };
+    
     public EEnemyType Type => _type;
     
     protected EnemiesController enemiesController;
     protected Player player;
     protected int health;
     protected float nextDamage = 0;
+    
+    private Action<AEnemy> OnDie = enemy => { };
 
     protected virtual void Start()
     {
@@ -60,16 +62,6 @@ public abstract class AEnemy : MonoBehaviour, IMoveable, IDamagable
         gameObject.SetActive(true);
     }
 
-    protected virtual void ResetEnemy()
-    {
-        health = baseHealth;
-    }
-
-    protected virtual Vector2 GetDirection()
-    {
-        return (enemiesController.TargetPoint - (Vector2)transform.position).normalized;
-    }
-
     public virtual void GetDamage(int damage)
     {
         health -= damage;
@@ -86,5 +78,14 @@ public abstract class AEnemy : MonoBehaviour, IMoveable, IDamagable
     public virtual void Move()
     {
         rigidbody2D.position += GetDirection() * speed;
+    }
+    protected virtual void ResetEnemy()
+    {
+        health = baseHealth;
+    }
+
+    protected virtual Vector2 GetDirection()
+    {
+        return (enemiesController.TargetPoint - (Vector2)transform.position).normalized;
     }
 }

@@ -40,7 +40,7 @@ public class Pool<T>
         }
     }
 
-    public bool AddFreeObject(Enum type, T obj)
+    public bool TryAddFreeObject(Enum type, T obj)
     {
         if (!pool.Keys.Contains(type))
         {
