@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Interfaces;
 using UnityEngine;
 
@@ -12,14 +10,14 @@ public enum EEnemyType
 
 public abstract class AEnemy : MonoBehaviour, IMoveable, IDamagable
 {
-    [SerializeField] protected EEnemyType _type;
+    [SerializeField] protected EEnemyType type;
     [SerializeField] protected Rigidbody2D rigidbody2D;
     [SerializeField] protected int baseHealth = 1;
     [SerializeField] protected int damage = 1;
     [SerializeField] protected float speed = 1;
     [SerializeField] protected float damageDelay = 1;
     
-    public EEnemyType Type => _type;
+    public EEnemyType Type => type;
     
     protected EnemiesController enemiesController;
     protected Player player;

@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -8,19 +6,19 @@ public class BulletController : AController
 {
     [SerializeField] private Transform bulletsPoolTransform;
     
-    public Camera Camera => _camera;
+    public Camera Camera => camera;
 
     private Action<bool> shoot = b => {};
     private Pool<Bullet> bulletsPool;
     private AWeaponBase weapon;
-    private bool _isDown = false;
-    private Camera _camera;
+    private bool isDown = false;
+    private Camera camera;
     private Player player;
 
     private void Start()
     {
         Controllers.Instance.GetController(EControllerType.Player, out player);
-        _camera = Camera.main;
+        camera = Camera.main;
         bulletsPool = new Pool<Bullet>(() =>
         {
             var bullet = Instantiate(weapon.Bullet, bulletsPoolTransform);
@@ -30,10 +28,10 @@ public class BulletController : AController
 
     private void Update()
     { 
-        shoot.Invoke(_isDown);
+        shoot.Invoke(isDown);
     }
 
-    public void SetIsDown(bool value) => _isDown = value;
+    public void SetIsDown(bool value) => isDown = value;
 
     public void SetWeapon(AWeaponBase weapon)
     {

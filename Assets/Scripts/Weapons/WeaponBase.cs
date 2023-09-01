@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,13 +9,13 @@ public enum EWeaponType
 
 public abstract class AWeaponBase: MonoBehaviour
 {
-    [SerializeField] protected EWeaponType _type;
-    [SerializeField] protected int _damage = 1;
+    [SerializeField] protected EWeaponType type;
+    [SerializeField] protected int damage = 1;
     [SerializeField] protected float reloadTime = 1;
-    [SerializeField] protected Bullet _bulletPrefab;
+    [SerializeField] protected Bullet bulletPrefab;
 
-    public EWeaponType Type => _type;
-    public int Damage => _damage;
+    public EWeaponType Type => type;
+    public int Damage => damage;
     
     protected BulletController bulletController;
     protected Player player;
@@ -33,7 +30,7 @@ public abstract class AWeaponBase: MonoBehaviour
         this.bulletController = bulletController;
     }
 
-    public Bullet Bullet => _bulletPrefab;
+    public Bullet Bullet => bulletPrefab;
 
     public virtual void Shoot(bool isDown = false)
     {
@@ -62,7 +59,7 @@ public abstract class AWeaponBase: MonoBehaviour
 
     protected void BaseShoot(Vector2 direction)
     {
-        var bullet = bulletController.GetBullet(_type);
+        var bullet = bulletController.GetBullet(type);
         bullet.transform.position = player.BulletSpawnTransform.position;
         bullet.transform.right = direction;
         bullet.Fire(direction);

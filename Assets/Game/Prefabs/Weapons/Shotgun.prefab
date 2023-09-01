@@ -97,10 +97,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c6c35572d200ef4488a4734995b21b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _type: 0
-  _damage: 1
+  type: 0
+  damage: 1
   reloadTime: 1
-  _bulletPrefab: {fileID: 214654997225473482, guid: baef6c41f65fb4940b097b8137dc2fad, type: 3}
-  sprite: {fileID: 21300000, guid: 49c81c8adfd8317438168c5d21152b49, type: 3}
+  bulletPrefab: {fileID: 214654997225473482, guid: baef6c41f65fb4940b097b8137dc2fad, type: 3}
   bulletCountBase: 5
   scatterBase: 10

@@ -708,7 +708,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6289c3818324a334a8da2c4fc3b10ba6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _controllerType: 5
+  controllerType: 5
 --- !u!1 &843048994
 GameObject:
   m_ObjectHideFlags: 0
@@ -1478,19 +1478,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 533a647d15a980a47b2a553441c81c23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _controllerType: 1
+  controllerType: 1
   speed: {x: 0.1, y: 0.1}
   baseHealth: 9
   weaponChangeDelay: 0.5
   rigidbody2D: {fileID: 1436966232}
-  _collider: {fileID: 1436966233}
+  collider: {fileID: 1436966233}
   weapons:
   - {fileID: -1795825911965267809, guid: b8fe03d6c7aa092479812af40b8e379e, type: 3}
   - {fileID: -4726598886706576995, guid: 0a1dcdca29a1da34e930f41504a5d327, type: 3}
-  _bulletSpawnTransform: {fileID: 1952614875}
+  bulletSpawnTransform: {fileID: 1952614875}
   healthText: {fileID: 1904530848}
   weaponRootTransform: {fileID: 1917792487}
-  _weaponTransform: {fileID: 1947507732}
+  weaponTransform: {fileID: 1947507732}
 --- !u!50 &1436966232
 Rigidbody2D:
   serializedVersion: 4
@@ -1732,7 +1732,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fc1a262a16c8e749b23001cbfb297e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _controllerType: 2
+  controllerType: 2
   spawnDelay: 0.1
   maxEnemiesCount: 10
   spawnAreas:
@@ -1803,7 +1803,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fce8c115d871c0643b940a82c8bc8155, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _controllerType: 4
+  controllerType: 4
   windowsList:
   - type: 0
     window: {fileID: 905636459}
@@ -2407,7 +2407,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eab3e95f1f6aa424799d564fd75d2c3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _controllerType: 3
+  controllerType: 3
   bulletsPoolTransform: {fileID: 153988397}
 --- !u!1 &2035715776
 GameObject:
@@ -2741,7 +2741,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dd595a89b272ad4080b0583482624a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _controllerType: 0
+  controllerType: 0
   tiles:
   - {fileID: 11400000, guid: f86a97ca9177f70448c310a5f4a7c23d, type: 2}
   - {fileID: 11400000, guid: 5d764298b1508b54ea41ca5dad4e888e, type: 2}

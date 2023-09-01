@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using Interfaces;
 using TMPro;
@@ -12,32 +10,32 @@ public class Player : AController, IMoveable, IDamagable
     [SerializeField] private int baseHealth = 9;
     [SerializeField] private float weaponChangeDelay = 0.5f;
     [SerializeField] private Rigidbody2D rigidbody2D;
-    [SerializeField] private BoxCollider2D _collider;
+    [SerializeField] private BoxCollider2D collider;
     [SerializeField] private List<AWeaponBase> weapons;
-    [SerializeField] private Transform _bulletSpawnTransform;
+    [SerializeField] private Transform bulletSpawnTransform;
     [SerializeField] private TextMeshProUGUI healthText;
     [SerializeField] private Transform weaponRootTransform;
-    [SerializeField] private Transform _weaponTransform;
+    [SerializeField] private Transform weaponTransform;
     
-    public BoxCollider2D Collider2D => _collider;
-    public Transform BulletSpawnTransform => _bulletSpawnTransform;
-    public Transform WeaponTransform => _weaponTransform;
+    public BoxCollider2D Collider2D => collider;
+    public Transform BulletSpawnTransform => bulletSpawnTransform;
+    public Transform WeaponTransform => weaponTransform;
     
     private int Health
     {
         get
         {
-            return _health;
+            return health;
         }
         set
         {
-            _health = value;
+            health = value;
             healthText.text = value.ToString();
         }
     }
     
     private int currentWeaponIndex = 0;
-    private int _health;
+    private int health;
     private float nextWeaponChange = 0;
     private Vector2 direction;
     private BulletController bulletController;

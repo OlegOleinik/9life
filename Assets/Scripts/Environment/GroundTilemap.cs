@@ -11,7 +11,7 @@ public class GroundTilemap : MonoBehaviour
 {
     [SerializeField] private Tilemap tilemap;
     public Tilemap Tilemap => tilemap;
-    public GroundTileCoords Coords => _coords;
+    public GroundTileCoords Coords => coords;
 
-    private GroundTileCoords _coords = new GroundTileCoords();
+    private GroundTileCoords coords = new GroundTileCoords();
 }

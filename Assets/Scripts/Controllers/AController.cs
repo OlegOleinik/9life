@@ -12,7 +12,7 @@ public enum EControllerType
 
 public abstract class AController : MonoBehaviour
 {
-    [SerializeField] private EControllerType _controllerType;
+    [SerializeField] private EControllerType controllerType;
     
-    public EControllerType ControllerType => _controllerType;
+    public EControllerType ControllerType => controllerType;
 }
